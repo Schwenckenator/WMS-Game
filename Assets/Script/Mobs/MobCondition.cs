@@ -13,7 +13,7 @@ public class MobCondition : MonoBehaviour {
 
 
 	private float maxHunger = 1000;
-	private float maxThirst = 200;
+	private float maxThirst = 500;
 	private float maxHealth = 100;
 	private float maxHappiness = 100;
 
