@@ -499,8 +499,8 @@ public class MobJobs : MonoBehaviour {
 
 			}else if(mobItem.InventoryHasItem()){
 				GameObject itemType = manager.TerrainTypes[mobItem.DropItemAtIndex(0)];
-				GameObject newItem = Instantiate(itemType, transform.position, transform.rotation) as GameObject;
-
+				//GameObject newItem = Instantiate(itemType, transform.position, transform.rotation) as GameObject;
+				Instantiate(itemType, transform.position, transform.rotation);
 			}
 			FinishJob();
 		}

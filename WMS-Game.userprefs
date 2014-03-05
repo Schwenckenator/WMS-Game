@@ -1,11 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\Mobs\MobJobs.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\Mobs\MobMovement.cs">
     <Files>
-      <File FileName="Assets\Script\TerrainDetails.cs" Line="22" Column="2" />
-      <File FileName="Assets\Script\Mobs\MobCondition.cs" Line="40" Column="23" />
-      <File FileName="Assets\Script\Mobs\MobBehaviour.cs" Line="24" Column="17" />
-      <File FileName="Assets\Script\Mobs\MobJobs.cs" Line="19" Column="47" />
+      <File FileName="Assets\Script\GUIScript.cs" Line="90" Column="25" />
+      <File FileName="Assets\Script\Mobs\MobCondition.cs" Line="98" Column="32" />
+      <File FileName="Assets\Script\SpawnRocks.cs" Line="90" Column="33" />
+      <File FileName="Assets\Script\GameManager.cs" Line="18" Column="2" />
+      <File FileName="Assets\Script\Mobs\MobJobs.cs" Line="505" Column="16" />
+      <File FileName="Assets\Script\Mobs\MobMovement.cs" Line="20" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -8,10 +8,17 @@ public class GUIScript : MonoBehaviour {
 	private SpawnRocks spawnRocks;
 	private GameManager manager;
 	private DragSelect dragSelect;
+
+	private int sWidth;
+	private int sHeight;
+
 	void Start(){
 		spawnRocks = GetComponent<SpawnRocks>();
 		manager = GetComponent<GameManager>();
 		dragSelect= GetComponent<DragSelect>();
+
+		sWidth = Screen.width;
+		sHeight = Screen.height;
 	}
 	void OnGUI(){
 		// A lot of this is magic numbers right now, should probably change that soon -Matt
@@ -68,6 +75,27 @@ public class GUIScript : MonoBehaviour {
 			dragSelect.SetSelectionType("GatheringZone");
 		}
 
+
+		//New job list
+
+		GUI.Box (new Rect(sWidth - 210,10,200, sHeight-20), "Debug\nJobs List");
+		int basePos = 40;
+		int posDelta = 20;
+		int index = 0;
+		int extraJobs = 0;
+		foreach(JobClass job in manager.JobList){
+
+
+			if(basePos+posDelta*index < sHeight-60){
+				GUI.Label (new Rect(sWidth - 200, basePos + posDelta * index, 180, 20), job.JobName + ", " + job.JobDetails + ", " + job.JobLocation.ToString());
+				index++;
+			}else{
+				extraJobs++;
+			}
+		}
+		if(extraJobs > 0){
+			GUI.Label (new Rect(sWidth - 200, sHeight-40, 180, 20), extraJobs.ToString() + " undisplayed jobs.");
+		}
 
 
 	}

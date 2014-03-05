@@ -90,7 +90,9 @@ public class MobCondition : MonoBehaviour {
 		if(health <= 0){
 			//Is ded
 			//Spawn dead body item
-			GameObject deadBody = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.humanCorpse], transform.position, transform.rotation) as GameObject;
+			//GameObject deadBody = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.humanCorpse], transform.position, transform.rotation) as GameObject;
+			Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.humanCorpse], transform.position, transform.rotation);
+
 			//Destroy current person
 			Destroy(gameObject);
 		}else if(health > maxHealth){

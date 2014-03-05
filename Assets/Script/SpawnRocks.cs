@@ -80,13 +80,17 @@ public class SpawnRocks : MonoBehaviour {
 			
 			
 			Vector3 pos = new Vector3( GameManager.GridToWorld(x), GameManager.GridToWorld(y), 0);
-			GameObject newFoodDrink;
+			//GameObject newFoodDrink;
 			if(i%3 == 0){
-				newFoodDrink = Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.food ], pos, new Quaternion()) as GameObject;
+				//newFoodDrink = Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.food ], pos, new Quaternion()) as GameObject;
 				//newFoodDrink.GetComponent<ItemDetails>().Initialise(true, 30, false, 0);
+
+				Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.food ], pos, new Quaternion());
 			}else{
-				newFoodDrink = Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.drink ], pos, new Quaternion()) as GameObject;
+				//newFoodDrink = Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.drink ], pos, new Quaternion()) as GameObject;
 				//newFoodDrink.GetComponent<ItemDetails>().Initialise(false, 0, true,30);
+
+				Instantiate(manager.TerrainTypes[(int) GameManager.TerrainIndex.drink ], pos, new Quaternion());
 			}
 
 

@@ -7,7 +7,7 @@ public class MobMovement : MonoBehaviour {
 	public bool walking;
 	float speed = 0.02f;
 	GameManager manager;
-	MobBehaviour behaviour;
+	//MobBehaviour behaviour;
 	private int STEP_COST = 1;
 	public int[,] PathGrid;
 	
@@ -24,7 +24,7 @@ public class MobMovement : MonoBehaviour {
 	private int numOfCellsChanged = 0;
 
 	void Start () {
-		behaviour = GetComponent<MobBehaviour>();
+		//behaviour = GetComponent<MobBehaviour>();
 		manager = GameObject.FindGameObjectWithTag ("Manager").GetComponent<GameManager> ();
 		PathGrid = new int[GameManager.MaxGrid(),GameManager.MaxGrid()];
 		goalPos = transform.position;
