@@ -14,7 +14,7 @@ public class SpawnRocks : MonoBehaviour {
 		ShitTerrain(500, manager.TerrainTypes[ (int)GameManager.TerrainIndex.rock]);
 		ShitTerrain(100, manager.TerrainTypes[ (int)GameManager.TerrainIndex.tree]);
 		ShitTerrain(100, manager.TerrainTypes[ (int)GameManager.TerrainIndex.scrapMetal]);
-		ShitFoodDrink(15);
+		//ShitFoodDrink(15);
 	}
 
 	public void ShitTerrain(int num, GameObject terrain){

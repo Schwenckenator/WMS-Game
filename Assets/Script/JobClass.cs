@@ -96,5 +96,7 @@ public class JobClass : ScriptableObject{
 
 	public void MakeRing(){
 		selectionRing = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.ring], jobLocation, new Quaternion()) as GameObject;
+		//Tell the ring what job it's connected to
+		selectionRing.GetComponent<SelectionRingDetails>().SetJob(this);
 	}
 }

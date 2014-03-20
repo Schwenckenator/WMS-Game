@@ -28,7 +28,7 @@ public class GUIScript : MonoBehaviour {
 		int diffY = 40;
 		int buttonNum = 0;
 
-		GUI.Box (new Rect(10,10,200, 560), "Debug Menu");
+		GUI.Box (new Rect(10,10,200, Screen.height-20), "Debug Menu");
 		//Make a background Box
 		GUI.Label(new Rect(30,40,160,60),"For your own safety, don't overfill space. Will ∞ loop");
 		//Make the first button, if it is pressed, shit 10 rocks
@@ -73,6 +73,9 @@ public class GUIScript : MonoBehaviour {
 		}
 		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Gathering Zone")){
 			dragSelect.SetSelectionType("GatheringZone");
+		}
+		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
+			dragSelect.SetSelectionType("CancelJob");
 		}
 
 

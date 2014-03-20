@@ -10,12 +10,15 @@ public class MobCondition : MonoBehaviour {
 	private float thirst;
 	private float health;
 	private float happiness;
+	private float sleep;
 
-
-	private float maxHunger = 1000;
-	private float maxThirst = 500;
-	private float maxHealth = 100;
-	private float maxHappiness = 100;
+	// ~ -> default
+	// If the number are different, it's for testing purposes
+	private float maxHunger = 1000; 	//~ 1000
+	private float maxThirst = 500; 		//~ 500
+	private float maxHealth = 100; 		//~ 100
+	private float maxHappiness = 100; 	//~ 100
+	private float maxSleep = 3000; 		//~ 3000
 
 	private int strength;		// NOT CURRENTLY USED
 	private int charisma;		// NOT CURRENTLY USED
@@ -32,6 +35,7 @@ public class MobCondition : MonoBehaviour {
 		InitialiseStats();
 		StartCoroutine("HungerTick");
 		StartCoroutine("ThirstTick");
+		StartCoroutine("SleepTick");
 		StartCoroutine("HappinessCheck");
 
 	}
@@ -40,12 +44,14 @@ public class MobCondition : MonoBehaviour {
 		maxHunger *= Random.Range(0.8f, 1.2f);
 		maxThirst *= Random.Range(0.8f, 1.2f);
 		maxHealth *= Random.Range(0.8f, 1.2f);
+		maxSleep *= Random.Range(0.8f, 1.2f);
 
 		//Assign maximum
 		hunger = maxHunger;
 		thirst = maxThirst;
 		happiness = maxHappiness;
 		health = maxHealth;
+		sleep = maxSleep;
 	}
 
 	IEnumerator HungerTick(){
@@ -74,6 +80,18 @@ public class MobCondition : MonoBehaviour {
 		}
 	}
 
+	IEnumerator SleepTick(){
+		while (health > 0){
+			if(sleep > 0){
+				sleep -= 1.0f;
+			}else{
+				Debug.Log ("Too Sleepy!");
+			}
+			SleepCheck();
+			yield return new WaitForSeconds(1.0f);
+		}
+	}
+
 	IEnumerator HappinessCheck(){
 		while (health > 0){
 			if(thirst < maxThirst * 0.4f){ // Less than 40% of max, start losing happiness
@@ -85,6 +103,8 @@ public class MobCondition : MonoBehaviour {
 			yield return new WaitForSeconds(10.0f);
 		}
 	}
+
+
 
 	void HealthCheck(){
 		if(health <= 0){
@@ -122,7 +142,18 @@ public class MobCondition : MonoBehaviour {
 		// At 40% thirst, you lose happiness
 		// At 20% thirst, you get "weak" debuff
 	}
-	
+	void SleepCheck(){
+		// At 60% thirst, you are thirst
+		if(sleep < maxSleep * 0.2f){
+			mobBehave.sleepy = true;
+			mobBehave.Sleep (maxSleep);
+		}else {
+			mobBehave.sleepy = false;
+		}
+		// At 40% thirst, you lose happiness
+		// At 20% thirst, you get "weak" debuff
+	}
+
 	public float GetHunger(){
 		return hunger;
 	}
@@ -137,6 +168,9 @@ public class MobCondition : MonoBehaviour {
 
 	public void Drink(int percent){
 		thirst += (percent*maxThirst) / 100.0f;
+	}
+	public void Sleep(){
+		sleep = maxSleep;
 	}
 
 	public void DamageHealth(int dam){

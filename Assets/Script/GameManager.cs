@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	public Vector3 materialHealth;
 	public GameObject[] TerrainTypes;
 	public enum TerrainIndex{guy, rock, rockPiece, tree, ring, stockpile, stoneWall, gatheringZone, woodLog, woodWall, humanCorpse, food, drink,
-		scrapMetal, metalPiece, metalWall
+		scrapMetal, metalPiece, metalWall, sleepZZZ
 	};
 	
 

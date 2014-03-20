@@ -20,6 +20,10 @@ public class MobJobs : MonoBehaviour {
 	private int build;
 	private int buildPatience;
 
+	private int MAX_SLEEP;
+	private int SLEEP;
+	private GameObject SleepZZZ;
+
 	void Awake(){
 		manager = GameObject.FindGameObjectWithTag ("Manager").GetComponent<GameManager> ();
 		idleJob = ScriptableObject.CreateInstance<JobClass> ();
@@ -209,6 +213,18 @@ public class MobJobs : MonoBehaviour {
 			}
 		}
 	}
+	public void CreateSleepJob(float maxSleep){
+		MAX_SLEEP = (int)maxSleep *30;
+		//This would be the searching for bed part, but for now have them crash wherever
+		int[] newGridPos = mobMove.BoredStep();
+		if(newGridPos[0] != -1 && newGridPos[1] != -1){
+			JobClass newJob = ScriptableObject.CreateInstance<JobClass>();
+			
+			Vector2 pos = new Vector2(GameManager.GridToWorld(newGridPos[0]), GameManager.GridToWorld(newGridPos[1]));
+			newJob.Initialise("Sleep", pos, false);
+			AddPersonalJob(newJob);
+		}
+	}
 	IEnumerator HungryJobReset(){
 		yield return new WaitForSeconds(10.0f);
 		mobBehave.hungryJob = false;
@@ -338,6 +354,14 @@ public class MobJobs : MonoBehaviour {
 					EatDrink ();
 				}else{
 					mobMove.GetGoal ();
+				}
+				break;
+			case "Sleep":
+				if(mobMove.StepsAwayFromGoal() == 0){
+					atJobSite = true;
+					Sleep();
+				}else{
+					mobMove.GetGoal();
 				}
 				break;
 			}
@@ -546,6 +570,19 @@ public class MobJobs : MonoBehaviour {
 		//	Increase amount of resource on person
 		FinishJob ();
 
+	}
+
+	void Sleep(){
+
+		if(SLEEP == 0){//Start new sleep
+			SLEEP = MAX_SLEEP;
+			SleepZZZ = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.sleepZZZ], transform.position + new Vector3(0.15f, 0.15f, 0.0f),transform.rotation) as GameObject;
+		}else if(--SLEEP == 0){
+			mobBehave.sleepJob = false;
+			mobCon.Sleep();
+			Destroy(SleepZZZ);
+			FinishJob();
+		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------- HELPER FUNCTIONS FOR JOB CODE -----------------------------------------------

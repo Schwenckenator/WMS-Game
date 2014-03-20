@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DragSelect : MonoBehaviour {
 
 	public GameObject selector;
-	public Material materialRed;
-	public Material materialBlue;
-	public Material materialWhite;
+
+	public Material[] selectorMaterials;
+	public enum colour {red, blue, white, black};
 	
 
 	private GameManager manager;
@@ -48,16 +49,18 @@ public class DragSelect : MonoBehaviour {
 				selectorInstance = Instantiate(selector, corner, new Quaternion()) as GameObject;
 				selectorInstance.transform.localScale = new Vector3();
 
-				Material colour = materialWhite;
+				Material selectorColour = selectorMaterials[(int)colour.white];
 				if(selectionType == "Mine" || selectionType == "Chop"){
-					colour = materialBlue;
+					selectorColour = selectorMaterials[(int)colour.blue];
 				}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal" ){
-					colour = materialRed;
+					selectorColour = selectorMaterials[(int)colour.red];
 				}else if(selectionType == "Stockpile" || selectionType == "GatheringZone"){
-					colour = materialWhite;
+					selectorColour = selectorMaterials[(int)colour.white];
+				}else if(selectionType == "CancelJob"){
+					selectorColour = selectorMaterials[(int)colour.black];
 				}
 
-				selectorInstance.transform.GetChild(0).renderer.material = colour;
+				selectorInstance.transform.GetChild(0).renderer.material = selectorColour;
 			}
 			// ********** Mouse Drag **********
 			else if(Input.GetMouseButton(0)){
@@ -106,6 +109,8 @@ public class DragSelect : MonoBehaviour {
 						PlaceStockpile();
 					}else if(selectionType == "GatheringZone"){
 						PlaceGatheringZone();
+					}else if(selectionType == "CancelJob"){
+						CancelSelectedJobs ();
 					}
 					if(!Input.GetKey(KeyCode.LeftShift)){
 						Reset ();
@@ -118,7 +123,32 @@ public class DragSelect : MonoBehaviour {
 	void Reset(){
 		selectionType = "None";
 	}
+	void CancelSelectedJobs(){
+		Debug.Log("CancelSelectedJobs()");
+		Vector2 temp = selectorInstance.transform.localScale;
+		temp.y *= -1;
+		Vector2 point = selectorCorner + temp;
 
+		Collider2D[] obj;
+		obj = Physics2D.OverlapAreaAll(selectorCorner, point);
+
+		//Assemble a list of jobs to cancel
+		List<JobClass> cancelList = new List<JobClass>();
+		for(int i=0; i< obj.Length; i++){
+			Debug.Log("Object in area");
+			if(obj[i].CompareTag("SelectionRing")){
+				Debug.Log("Has the tag \"SelectionRing\"");
+				cancelList.Add(obj[i].GetComponent<SelectionRingDetails>().GetJob());
+			}
+		}
+		//Mark the jobs as complete
+		//Just loop through the cancel list? Will this work?
+		foreach (JobClass job in cancelList){
+			job.complete = true;
+		}
+
+
+	}
 	void SelectObjects(){
 		Vector2 temp = selectorInstance.transform.localScale;
 		temp.y *= -1;

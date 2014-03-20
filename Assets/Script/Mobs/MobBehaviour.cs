@@ -19,6 +19,8 @@ public class MobBehaviour : MonoBehaviour {
 	public bool hungryJob = false;
 	public bool thirsty = false;
 	public bool thirstyJob = false;
+	public bool sleepy = false;
+	public bool sleepJob = false;
 
 	// Use this for initialization
 	void Start () {
@@ -102,6 +104,15 @@ public class MobBehaviour : MonoBehaviour {
 			RefreshBoredom();
 			jobs.CreateEatDrinkJob("Drink");
 			thirstyJob = true;
+		}
+	}
+
+	public void Sleep(float maxSleep){
+		if(!sleepJob){
+			Debug.Log("Mob behaviour Sleep!");
+			RefreshBoredom();
+			jobs.CreateSleepJob(maxSleep);
+			sleepJob = true;
 		}
 	}
 }

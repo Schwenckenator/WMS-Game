@@ -61,6 +61,7 @@
      <Compile Include="Assets\Script\Mobs\MobMovement.cs" />
      <Compile Include="Assets\Script\Mobs\OldMobMovement.cs" />
      <Compile Include="Assets\Script\PopRocks.cs" />
+     <Compile Include="Assets\Script\SelectionRingDetails.cs" />
      <Compile Include="Assets\Script\SpawnRocks.cs" />
      <Compile Include="Assets\Script\StockpileDetails.cs" />
      <Compile Include="Assets\Script\TerrainDetails.cs" />
