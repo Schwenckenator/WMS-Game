@@ -105,10 +105,8 @@ public class DragSelect : MonoBehaviour {
 						SelectObjects();
 					}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal"){
 						PlaceObjects();
-					}else if(selectionType == "Stockpile"){
-						PlaceStockpile();
-					}else if(selectionType == "GatheringZone"){
-						PlaceGatheringZone();
+					}else if(selectionType == "Stockpile" || selectionType == "GatheringZone"){
+						PlaceZone ();
 					}else if(selectionType == "CancelJob"){
 						CancelSelectedJobs ();
 					}
@@ -254,105 +252,75 @@ public class DragSelect : MonoBehaviour {
 		}
 
 	}
-	void PlaceStockpile(){
+	void PlaceZone(){
 		//Get scale
-		//Instatiate stockpile object undernearth with same scale and position as selector instance
-		GameObject newStockpile = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.stockpile], 
-		                                      selectorInstance.transform.position, new Quaternion()) as GameObject;
+		//Check for min size, 3x3
+		float xScale = selectorInstance.transform.localScale.x;
+		float yScale = selectorInstance.transform.localScale.y;
 
-		newStockpile.transform.localScale = selectorInstance.transform.localScale;
+		//Make scale positive
+		if(xScale < 0) xScale *= -1;
+		if(yScale < 0) yScale *= -1;
 
-		//First, find grid point corners
+		if(xScale >= 0.75f && yScale >= 0.75f){
+			GameObject newZone = null;
+			//Instatiate stockpile object undernearth with same scale and position as selector instance
+			//Stockpile exists, give it info about its grid points
+			if(selectionType == "GatheringZone"){
+				newZone = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.gatheringZone], 
+				                                 selectorInstance.transform.position, new Quaternion()) as GameObject;
+			}else if(selectionType == "Stockpile"){
+				newZone = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.stockpile], 
+				                                      selectorInstance.transform.position, new Quaternion()) as GameObject;
+			}
 
-		Vector2 temp = selectorInstance.transform.localScale;
-		temp.y *= -1;
-		Vector2 dir = temp;
-		//Undo selector movement
-		
-		
-		Vector2 point = corner + temp;
-		
-		if(dir.x < 0){
-			point.x += 0.25f;
-			corner.x += 0.25f;
+			newZone.transform.localScale = selectorInstance.transform.localScale;
+			//First, find grid point corners
+			
+			Vector2 temp = selectorInstance.transform.localScale;
+			temp.y *= -1;
+			Vector2 dir = temp;
+			//Undo selector movement
+			
+			
+			Vector2 point = corner + temp;
+			
+			if(dir.x < 0){
+				point.x += 0.25f;
+				corner.x += 0.25f;
+			}
+			if(dir.y < 0){
+				point.y += 0.25f;
+				corner.y += 0.25f;
+			}
+			
+			int xGridCorner, yGridCorner;
+			int xGridPoint, yGridPoint;
+			
+			// Corner to grid space
+			xGridCorner = GameManager.WorldToGrid(corner.x);
+			yGridCorner = GameManager.WorldToGrid(corner.y);
+			// Point to grid spcae
+			xGridPoint = GameManager.WorldToGrid(point.x);
+			yGridPoint = GameManager.WorldToGrid(point.y);
+			
+			//Need to make it loop from lowest value to highest value,
+			// time for tricky variable fun
+			
+			int xLow = Mathf.Min(xGridCorner, xGridPoint);
+			int xHigh = Mathf.Max(xGridCorner, xGridPoint);
+			
+			int yLow = Mathf.Min(yGridCorner, yGridPoint);
+			int yHigh = Mathf.Max(yGridCorner, yGridPoint);
+			
+			//Stockpile exists, give it info about its grid points
+			if(selectionType == "GatheringZone"){
+				newZone.GetComponentInChildren<GatheringZoneDetails>().Initialise(xLow,xHigh, yLow, yHigh);
+			}else if(selectionType == "Stockpile"){
+				newZone.GetComponentInChildren<StockpileDetails>().Initialise(xLow,xHigh, yLow, yHigh);
+			}
 		}
-		if(dir.y < 0){
-			point.y += 0.25f;
-			corner.y += 0.25f;
-		}
-		
-		int xGridCorner, yGridCorner;
-		int xGridPoint, yGridPoint;
-		
-		// Corner to grid space
-		xGridCorner = GameManager.WorldToGrid(corner.x);
-		yGridCorner = GameManager.WorldToGrid(corner.y);
-		// Point to grid spcae
-		xGridPoint = GameManager.WorldToGrid(point.x);
-		yGridPoint = GameManager.WorldToGrid(point.y);
-		
-		//Need to make it loop from lowest value to highest value,
-		// time for tricky variable fun
-		
-		int xLow = Mathf.Min(xGridCorner, xGridPoint);
-		int xHigh = Mathf.Max(xGridCorner, xGridPoint);
-		
-		int yLow = Mathf.Min(yGridCorner, yGridPoint);
-		int yHigh = Mathf.Max(yGridCorner, yGridPoint);
-
-		//Stockpile exists, give it info about its grid points
-		newStockpile.GetComponentInChildren<StockpileDetails>().Initialise(xLow,xHigh, yLow, yHigh);
 
 	}
 
-	void PlaceGatheringZone(){
-		//Get scale
-		//Instatiate stockpile object undernearth with same scale and position as selector instance
-		GameObject newGatheringZone = Instantiate(manager.TerrainTypes[(int)GameManager.TerrainIndex.gatheringZone], 
-		                                      selectorInstance.transform.position, new Quaternion()) as GameObject;
-		
-		newGatheringZone.transform.localScale = selectorInstance.transform.localScale;
-		
-		//First, find grid point corners
-		
-		Vector2 temp = selectorInstance.transform.localScale;
-		temp.y *= -1;
-		Vector2 dir = temp;
-		//Undo selector movement
-		
-		
-		Vector2 point = corner + temp;
-		
-		if(dir.x < 0){
-			point.x += 0.25f;
-			corner.x += 0.25f;
-		}
-		if(dir.y < 0){
-			point.y += 0.25f;
-			corner.y += 0.25f;
-		}
-		
-		int xGridCorner, yGridCorner;
-		int xGridPoint, yGridPoint;
-		
-		// Corner to grid space
-		xGridCorner = GameManager.WorldToGrid(corner.x);
-		yGridCorner = GameManager.WorldToGrid(corner.y);
-		// Point to grid spcae
-		xGridPoint = GameManager.WorldToGrid(point.x);
-		yGridPoint = GameManager.WorldToGrid(point.y);
-		
-		//Need to make it loop from lowest value to highest value,
-		// time for tricky variable fun
-		
-		int xLow = Mathf.Min(xGridCorner, xGridPoint);
-		int xHigh = Mathf.Max(xGridCorner, xGridPoint);
-		
-		int yLow = Mathf.Min(yGridCorner, yGridPoint);
-		int yHigh = Mathf.Max(yGridCorner, yGridPoint);
-		
-		//Stockpile exists, give it info about its grid points
-		newGatheringZone.GetComponentInChildren<GatheringZoneDetails>().Initialise(xLow,xHigh, yLow, yHigh);
-
-	}
 }
