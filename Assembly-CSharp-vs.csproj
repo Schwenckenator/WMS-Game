@@ -65,6 +65,7 @@
      <Compile Include="Assets\Script\SpawnRocks.cs" />
      <Compile Include="Assets\Script\StockpileDetails.cs" />
      <Compile Include="Assets\Script\TerrainDetails.cs" />
+     <Compile Include="Assets\Script\ZoneDetails.cs" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>

@@ -12,6 +12,13 @@ public class GUIScript : MonoBehaviour {
 	private int sWidth;
 	private int sHeight;
 
+	private int selectedWindow = 0;
+
+	Rect ToolbarWindow;
+	Rect JobsWindow;
+	Rect ZonesWindow;
+	Rect DebugWindow;
+
 	void Start(){
 		spawnRocks = GetComponent<SpawnRocks>();
 		manager = GetComponent<GameManager>();
@@ -19,68 +26,26 @@ public class GUIScript : MonoBehaviour {
 
 		sWidth = Screen.width;
 		sHeight = Screen.height;
+
+		ToolbarWindow = new Rect (10, 10, sWidth - 230, 50);
+		JobsWindow = new Rect (10, 10, 200, sHeight-20);
+		ZonesWindow = new Rect (10, 10, 200, sHeight-20);
+		DebugWindow = new Rect (10, 10, 200, sHeight-20);
 	}
 	void OnGUI(){
-		// A lot of this is magic numbers right now, should probably change that soon -Matt
-		// Have to make it so stuff moves around with resizing/ different resolutions
 
-		int buttonYpos = 100;
-		int diffY = 40;
-		int buttonNum = 0;
-
-		GUI.Box (new Rect(10,10,200, Screen.height-20), "Debug Menu");
-		//Make a background Box
-		GUI.Label(new Rect(30,40,160,60),"For your own safety, don't overfill space. Will ∞ loop");
-		//Make the first button, if it is pressed, shit 10 rocks
-		if(GUI.Button(new Rect(30,buttonYpos+diffY*buttonNum++,160,20), "Shit Rocks(10)")){
-			spawnRocks.ShitTerrain(10, manager.TerrainTypes[ (int)GameManager.TerrainIndex.rock ]);
-		}
-		if(GUI.Button(new Rect(30,buttonYpos+diffY*buttonNum++,160,20), "Shit Rocks(100)")){
-			spawnRocks.ShitTerrain(100, manager.TerrainTypes[ (int)GameManager.TerrainIndex.rock]);
-		}
-		if(GUI.Button(new Rect(30,buttonYpos+diffY*buttonNum++,160,20), "Shit Trees(10)")){
-			spawnRocks.ShitTerrain(10, manager.TerrainTypes[ (int)GameManager.TerrainIndex.tree]);
-		}
-		if(GUI.Button(new Rect(30,buttonYpos+diffY*buttonNum++,160,20), "Shit Dude(1)")){
-			spawnRocks.ShitDude(1);
-		}
-		if(GUI.Button(new Rect(30,buttonYpos+diffY*buttonNum++,160,20), "Shit FoodDrink(10)")){
-			spawnRocks.ShitFoodDrink(10);
-		}
-		if(GUI.Button(new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Mine")){
-			// Change drag select to mine
-			dragSelect.SetSelectionType("Mine");
-		}
-		if(GUI.Button(new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Chop")){
-			// Change drag select to mine
-			dragSelect.SetSelectionType("Chop");
-			
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Build Stone Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildRock");
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildWood");
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Build Metal Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildMetal");
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Stockpile")){
-			dragSelect.SetSelectionType("Stockpile");
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Gathering Zone")){
-			dragSelect.SetSelectionType("GatheringZone");
-		}
-		if(GUI.Button (new Rect(30, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
-			dragSelect.SetSelectionType("CancelJob");
+		if(selectedWindow == 0 ){
+			GUI.Window(0,ToolbarWindow, Toolbar, "");
+		}else if(selectedWindow == 1){
+			GUI.Window(1,JobsWindow, JobsGUI, "");
+		}else if(selectedWindow == 2){
+			GUI.Window (2,ZonesWindow, ZonesGUI, "");
+		}else if(selectedWindow == 3){
+			GUI.Window (3,DebugWindow, DebugGUI, "");
 		}
 
 
 		//New job list
-
 		GUI.Box (new Rect(sWidth - 210,10,200, sHeight-20), "Debug\nJobs List");
 		int basePos = 40;
 		int posDelta = 20;
@@ -102,4 +67,100 @@ public class GUIScript : MonoBehaviour {
 
 
 	}
+	//************************************************************************************************
+	//**************************************** Window Options ****************************************
+	//************************************************************************************************
+	void Toolbar(int windowId){
+		int selected = 0;
+		string[] content = {"Jobs", "Zones", "Debug"};
+		selected = GUI.Toolbar(new Rect(10,10,300, 30),selected, content);
+		if(GUI.changed){
+			selectedWindow = ++selected;
+		}
+	}
+
+	void JobsGUI(int windowId){
+		int buttonYpos = 40;
+		int diffY = 40;
+		int buttonNum = 0;
+
+		if(GUI.Button(new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Mine")){
+			// Change drag select to mine
+			dragSelect.SetSelectionType("Mine");
+		}
+		if(GUI.Button(new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Chop")){
+			// Change drag select to mine
+			dragSelect.SetSelectionType("Chop");
+			
+		}
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Stone Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildRock");
+		}
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildWood");
+		}
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Metal Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildMetal");
+		}
+
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
+			dragSelect.SetSelectionType("CancelJob");
+		}
+
+		//Back button goes last always
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
+			selectedWindow = 0;
+		}
+	}
+	void ZonesGUI(int windowId){
+		int buttonYpos = 40;
+		int diffY = 40;
+		int buttonNum = 0;
+
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Stockpile")){
+			dragSelect.SetSelectionType("Stockpile");
+		}
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Gathering Zone")){
+			dragSelect.SetSelectionType("GatheringZone");
+		}
+		
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Delete Zone")){
+			dragSelect.SetSelectionType("DeleteZone");
+		}
+
+		//Back button goes last always
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
+			selectedWindow = 0;
+		}
+	}
+	void DebugGUI(int windowId){
+		int buttonYpos = 40;
+		int diffY = 40;
+		int buttonNum = 0;
+
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit Rocks(10)")){
+			spawnRocks.ShitTerrain(10, manager.TerrainTypes[ (int)GameManager.TerrainIndex.rock ]);
+		}
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit Rocks(100)")){
+			spawnRocks.ShitTerrain(100, manager.TerrainTypes[ (int)GameManager.TerrainIndex.rock]);
+		}
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit Trees(10)")){
+			spawnRocks.ShitTerrain(10, manager.TerrainTypes[ (int)GameManager.TerrainIndex.tree]);
+		}
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit Dude(1)")){
+			spawnRocks.ShitDude(1);
+		}
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit FoodDrink(10)")){
+			spawnRocks.ShitFoodDrink(10);
+		}
+
+		//Back button goes last always
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
+			selectedWindow = 0;
+		}
+	}
+
 }

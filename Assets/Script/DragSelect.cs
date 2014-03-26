@@ -109,6 +109,8 @@ public class DragSelect : MonoBehaviour {
 						PlaceZone ();
 					}else if(selectionType == "CancelJob"){
 						CancelSelectedJobs ();
+					}else if(selectionType == "DeleteZone"){
+						DeleteZone();
 					}
 					if(!Input.GetKey(KeyCode.LeftShift)){
 						Reset ();
@@ -314,13 +316,28 @@ public class DragSelect : MonoBehaviour {
 			int yHigh = Mathf.Max(yGridCorner, yGridPoint);
 			
 			//Stockpile exists, give it info about its grid points
-			if(selectionType == "GatheringZone"){
-				newZone.GetComponentInChildren<GatheringZoneDetails>().Initialise(xLow,xHigh, yLow, yHigh);
-			}else if(selectionType == "Stockpile"){
-				newZone.GetComponentInChildren<StockpileDetails>().Initialise(xLow,xHigh, yLow, yHigh);
-			}
+			newZone.GetComponentInChildren<ZoneDetails>().Initialise(xLow,xHigh, yLow, yHigh);
 		}
 
+	}
+	void DeleteZone(){
+		Debug.Log ("Deleting Zone!");
+		Vector2 temp = selectorInstance.transform.localScale;
+		temp.y *= -1;
+		Vector2 point = selectorCorner + temp;
+		
+		//For every terrain object in screen, are you in here?
+		// --- Will need optimising later, I'm sure of it. That's if it works.
+		// ^ scratch that, overlap area ftw!
+		Collider2D[] obj;
+		obj = Physics2D.OverlapAreaAll(selectorCorner, point);
+		
+		for(int i=0; i< obj.Length; i++){
+			Debug.Log (obj[i].tag);
+			if(obj[i].CompareTag("GatheringZone") || obj[i].CompareTag("Stockpile")){
+				Destroy (obj[i].gameObject);
+			}
+		}
 	}
 
 }
