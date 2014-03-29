@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Script\BuildingResourceDetails.cs" />
      <Compile Include="Assets\Script\CameraMove.cs" />
+     <Compile Include="Assets\Script\ClickPlace.cs" />
      <Compile Include="Assets\Script\DragSelect.cs" />
      <Compile Include="Assets\Script\GUIScript.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />

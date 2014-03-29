@@ -30,6 +30,7 @@ public class DragSelect : MonoBehaviour {
 	}
 	public void SetSelectionType(string newType){
 		selectionType = newType;
+		manager.clickFlag = true;
 	}
 	
 	// Update is called once per frame
@@ -39,7 +40,7 @@ public class DragSelect : MonoBehaviour {
 		 * ******************************************************************************************/
 
 		// ********** Mouse press **********
-		if(selectionType != "None"){
+		if(selectionType != "None" && !manager.clickFlag){
 			if(Input.GetMouseButtonDown(0)){
 				Vector3 camPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 				corner.x = GameManager.SnapToGrid(camPos.x);
@@ -50,7 +51,7 @@ public class DragSelect : MonoBehaviour {
 				selectorInstance.transform.localScale = new Vector3();
 
 				Material selectorColour = selectorMaterials[(int)colour.white];
-				if(selectionType == "Mine" || selectionType == "Chop"){
+				if(selectionType == "Mine" || selectionType == "Chop" || selectionType == "Demolish"){
 					selectorColour = selectorMaterials[(int)colour.blue];
 				}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal" ){
 					selectorColour = selectorMaterials[(int)colour.red];
@@ -101,7 +102,7 @@ public class DragSelect : MonoBehaviour {
 			else if(Input.GetMouseButtonUp(0)){
 				// If the selector exists
 				if(selectorInstance){
-					if(selectionType == "Mine" || selectionType == "Chop"){
+					if(selectionType == "Mine" || selectionType == "Chop" || selectionType == "Demolish"){
 						SelectObjects();
 					}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal"){
 						PlaceObjects();
@@ -118,6 +119,8 @@ public class DragSelect : MonoBehaviour {
 					Destroy(selectorInstance);
 				}
 			}
+		}else{
+			manager.clickFlag = false;
 		}
 	}
 	void Reset(){
@@ -170,6 +173,12 @@ public class DragSelect : MonoBehaviour {
 				}
 			}else if(selectionType == "Chop"){
 				if(obj[i].CompareTag("Wood")){
+					JobClass job = ScriptableObject.CreateInstance<JobClass> ();
+					job.Initialise("Mine", obj[i].transform.position, true);
+					manager.AddJob(job);
+				}
+			}else if(selectionType == "Demolish"){
+				if(obj[i].CompareTag("Structure")){
 					JobClass job = ScriptableObject.CreateInstance<JobClass> ();
 					job.Initialise("Mine", obj[i].transform.position, true);
 					manager.AddJob(job);

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
-
+	public bool clickFlag = false;
 	public LinkedList<JobClass> JobList;
 	public int[,] TerrainGrid;
 	//public int MAX_GRID = 38;
@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	public Vector3 materialHealth;
 	public GameObject[] TerrainTypes;
 	public enum TerrainIndex{guy, rock, rockPiece, tree, ring, stockpile, stoneWall, gatheringZone, woodLog, woodWall, humanCorpse, food, drink,
-		scrapMetal, metalPiece, metalWall, sleepZZZ
+		scrapMetal, metalPiece, metalWall, sleepZZZ, woodDoor
 	};
 	
 

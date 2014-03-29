@@ -8,6 +8,7 @@ public class GUIScript : MonoBehaviour {
 	private SpawnRocks spawnRocks;
 	private GameManager manager;
 	private DragSelect dragSelect;
+	private ClickPlace clickPlace;
 
 	private int sWidth;
 	private int sHeight;
@@ -23,6 +24,7 @@ public class GUIScript : MonoBehaviour {
 		spawnRocks = GetComponent<SpawnRocks>();
 		manager = GetComponent<GameManager>();
 		dragSelect= GetComponent<DragSelect>();
+		clickPlace = GetComponent<ClickPlace>();
 
 		sWidth = Screen.width;
 		sHeight = Screen.height;
@@ -93,6 +95,9 @@ public class GUIScript : MonoBehaviour {
 			dragSelect.SetSelectionType("Chop");
 			
 		}
+		if(GUI.Button(new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Demolish")){
+			dragSelect.SetSelectionType("Demolish");
+		}
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Stone Wall")){
 			// Change draf select to build
 			dragSelect.SetSelectionType("BuildRock");
@@ -101,6 +106,10 @@ public class GUIScript : MonoBehaviour {
 			// Change draf select to build
 			dragSelect.SetSelectionType("BuildWood");
 		}
+		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Door")){
+			clickPlace.SetPlaceType("WoodenDoor");
+		}
+
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Metal Wall")){
 			// Change draf select to build
 			dragSelect.SetSelectionType("BuildMetal");
@@ -109,6 +118,8 @@ public class GUIScript : MonoBehaviour {
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
 			dragSelect.SetSelectionType("CancelJob");
 		}
+
+
 
 		//Back button goes last always
 		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){

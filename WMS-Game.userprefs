@@ -1,10 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\DragSelect.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\Mobs\MobJobs.cs">
     <Files>
-      <File FileName="Assets\Script\DragSelect.cs" Line="319" Column="28" />
-      <File FileName="Assets\Script\ZoneDetails.cs" Line="25" Column="23" />
-      <File FileName="Assets\Script\GUIScript.cs" Line="149" Column="4" />
+      <File FileName="Assets\Script\DragSelect.cs" Line="205" Column="3" />
+      <File FileName="Assets\Script\ClickPlace.cs" Line="44" Column="21" />
+      <File FileName="Assets\Script\GUIScript.cs" Line="80" Column="32" />
+      <File FileName="Assets\Script\GameManager.cs" Line="17" Column="2" />
+      <File FileName="Assets\Script\Mobs\MobJobs.cs" Line="397" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -114,7 +114,7 @@ public class MobJobs : MonoBehaviour {
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("GatheringZone");
 		int[] newGridPos = {-1,-1};
 		foreach(GameObject obj in objs){
-			newGridPos = obj.GetComponent<GatheringZoneDetails>().GetRandomSpace();
+			newGridPos = obj.GetComponent<ZoneDetails>().GetRandomSpace();
 			found = true;
 		}
 
@@ -161,7 +161,7 @@ public class MobJobs : MonoBehaviour {
 		//Find a spot on a stockpile
 		bool found = false;
 		foreach(GameObject pile in GameObject.FindGameObjectsWithTag("Stockpile")){
-			int[] gridPos = pile.GetComponent<StockpileDetails>().GetFreeSpace();
+			int[] gridPos = pile.GetComponent<ZoneDetails>().GetFreeSpace();
 			// Get free space returns a -1 if there is no space
 			if(gridPos[0] == -1 || gridPos[1] == -1){
 				found = false;
@@ -384,7 +384,8 @@ public class MobJobs : MonoBehaviour {
 			while ((index < rock.Length) && !(minedRock)) {
 				if (rock [index].transform.CompareTag ("Rock") || 
 				    rock [index].transform.CompareTag ("Wood") || 
-				    rock [index].transform.CompareTag ("Metal")) 
+				    rock [index].transform.CompareTag ("Metal") ||
+				    rock [index].transform.CompareTag ("Structure")  ) 
 				{
 					rock [index].gameObject.GetComponent<TerrainDetails> ().DamageTerrain (1);
 					minedRock = true;
@@ -584,6 +585,8 @@ public class MobJobs : MonoBehaviour {
 			FinishJob();
 		}
 	}
+
+
 	//---------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------- HELPER FUNCTIONS FOR JOB CODE -----------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------
@@ -591,12 +594,12 @@ public class MobJobs : MonoBehaviour {
 	Vector3 NeededResources(){
 		if(myJob.JobDetails == "Rock"){
 			return new Vector3(0,50,0);
-		}
-		if(myJob.JobDetails == "Wood"){
+		}else if(myJob.JobDetails == "Wood"){
 			return new Vector3(50,0,0);
-		}
-		if(myJob.JobDetails == "Metal"){
+		}else if(myJob.JobDetails == "Metal"){
 			return new Vector3(0,0,50);
+		}else if(myJob.JobDetails == "WoodDoor"){
+			return new Vector3(50,0,0);
 		}
 		Debug.LogError("Method NeededResources() didn't find appropriate job detail.");
 		return new Vector3();
@@ -611,6 +614,8 @@ public class MobJobs : MonoBehaviour {
 
 		}else if(myJob.JobDetails == "Metal"){
 			return manager.TerrainTypes [(int)GameManager.TerrainIndex.metalWall];
+		}else if(myJob.JobDetails == "WoodDoor"){
+			return manager.TerrainTypes [(int)GameManager.TerrainIndex.woodDoor];
 		}
 		Debug.LogError("Method BuildingType() didn't find appropriate job detail.");
 		return null;
