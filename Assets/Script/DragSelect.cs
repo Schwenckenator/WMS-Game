@@ -138,9 +138,7 @@ public class DragSelect : MonoBehaviour {
 		//Assemble a list of jobs to cancel
 		List<JobClass> cancelList = new List<JobClass>();
 		for(int i=0; i< obj.Length; i++){
-			Debug.Log("Object in area");
 			if(obj[i].CompareTag("SelectionRing")){
-				Debug.Log("Has the tag \"SelectionRing\"");
 				cancelList.Add(obj[i].GetComponent<SelectionRingDetails>().GetJob());
 			}
 		}

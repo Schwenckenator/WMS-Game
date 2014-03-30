@@ -23,7 +23,7 @@ public class ClickPlace : MonoBehaviour {
 					corner.x = GameManager.SnapToGrid(camPos.x);
 					corner.y = GameManager.SnapToGrid(camPos.y);
 
-					if(placeType == "WoodenDoor"){
+					if(placeType == "BuildWoodenDoor"){
 						PlaceDoor();
 					}
 					if(!Input.GetKey(KeyCode.LeftShift)){
@@ -55,11 +55,11 @@ public class ClickPlace : MonoBehaviour {
 			
 			JobClass job = ScriptableObject.CreateInstance<JobClass> ();
 			job.Initialise("Build", pos, true);
-			if(placeType == "WoodenDoor"){
+			if(placeType == "BuildWoodenDoor"){
 				job.JobDetails = "WoodDoor";
-			}else if(placeType == "StoneDoor"){
+			}else if(placeType == "BuildStoneDoor"){
 				job.JobDetails = "StoneDoor";
-			}else if(placeType == "MetalDoor"){
+			}else if(placeType == "BuildMetalDoor"){
 				job.JobDetails = "MetalDoor";
 			}
 			manager.AddJob(job);

@@ -20,6 +20,16 @@ public class GUIScript : MonoBehaviour {
 	Rect ZonesWindow;
 	Rect DebugWindow;
 
+	const int TOOLBAR = 0;
+	const int JOBS = 1;
+	const int ZONES = 2;
+	const int DEBUG = 3;
+	const int BUILD_WALL = 4;
+	const int BUILD_DOOR = 5;
+
+	int buttonYpos = 40;
+	int diffY = 40;
+
 	void Start(){
 		spawnRocks = GetComponent<SpawnRocks>();
 		manager = GetComponent<GameManager>();
@@ -36,14 +46,23 @@ public class GUIScript : MonoBehaviour {
 	}
 	void OnGUI(){
 
-		if(selectedWindow == 0 ){
-			GUI.Window(0,ToolbarWindow, Toolbar, "");
-		}else if(selectedWindow == 1){
-			GUI.Window(1,JobsWindow, JobsGUI, "");
-		}else if(selectedWindow == 2){
-			GUI.Window (2,ZonesWindow, ZonesGUI, "");
-		}else if(selectedWindow == 3){
-			GUI.Window (3,DebugWindow, DebugGUI, "");
+		if(selectedWindow == TOOLBAR ){
+			GUI.Window(TOOLBAR,ToolbarWindow, Toolbar, "");
+		}
+		else if(selectedWindow == JOBS){
+			GUI.Window(JOBS,JobsWindow, JobsGUI, "");
+		}
+		else if(selectedWindow == ZONES){
+			GUI.Window (ZONES,ZonesWindow, ZonesGUI, "");
+		}
+		else if(selectedWindow == DEBUG){
+			GUI.Window (DEBUG,DebugWindow, DebugGUI, "");
+		}
+		else if(selectedWindow == BUILD_WALL){
+			GUI.Window (BUILD_WALL,DebugWindow, BuildWallGUI, "");
+		}
+		else if(selectedWindow == BUILD_DOOR){
+			GUI.Window (BUILD_DOOR,DebugWindow, BuildDoorGUI, "");
 		}
 
 
@@ -82,8 +101,6 @@ public class GUIScript : MonoBehaviour {
 	}
 
 	void JobsGUI(int windowId){
-		int buttonYpos = 40;
-		int diffY = 40;
 		int buttonNum = 0;
 
 		if(GUI.Button(new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Mine")){
@@ -98,22 +115,14 @@ public class GUIScript : MonoBehaviour {
 		if(GUI.Button(new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Demolish")){
 			dragSelect.SetSelectionType("Demolish");
 		}
-		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Stone Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildRock");
+
+		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wall")){
+			selectedWindow = BUILD_WALL;
 		}
-		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildWood");
-		}
-		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Door")){
-			clickPlace.SetPlaceType("WoodenDoor");
+		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Door")){
+			selectedWindow = BUILD_DOOR;
 		}
 
-		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Metal Wall")){
-			// Change draf select to build
-			dragSelect.SetSelectionType("BuildMetal");
-		}
 
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
 			dragSelect.SetSelectionType("CancelJob");
@@ -123,12 +132,43 @@ public class GUIScript : MonoBehaviour {
 
 		//Back button goes last always
 		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
-			selectedWindow = 0;
+			selectedWindow = TOOLBAR;
+		}
+	}
+	void BuildWallGUI(int windowId){
+		int buttonNum = 0;
+
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Stone Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildRockWall");
+		}
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildWoodWall");
+		}
+
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Metal Wall")){
+			// Change draf select to build
+			dragSelect.SetSelectionType("BuildMetalWall");
+		}
+		//Back button goes last always
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
+			selectedWindow = JOBS;
+		}
+	}
+	void BuildDoorGUI(int windowId){
+		int buttonNum = 0;
+		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Wooden Door")){
+			// Change draf select to build
+			clickPlace.SetPlaceType("BuildWoodenDoor");
+		}
+		//Back button goes last always
+		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Back")){
+			selectedWindow = JOBS;
 		}
 	}
 	void ZonesGUI(int windowId){
-		int buttonYpos = 40;
-		int diffY = 40;
+		
 		int buttonNum = 0;
 
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Stockpile")){
@@ -148,8 +188,7 @@ public class GUIScript : MonoBehaviour {
 		}
 	}
 	void DebugGUI(int windowId){
-		int buttonYpos = 40;
-		int diffY = 40;
+
 		int buttonNum = 0;
 
 		if(GUI.Button(new Rect(20,buttonYpos+diffY*buttonNum++,160,20), "Shit Rocks(10)")){
