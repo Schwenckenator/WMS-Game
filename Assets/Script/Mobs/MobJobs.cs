@@ -401,7 +401,7 @@ public class MobJobs : MonoBehaviour {
 		if(manager.TerrainAtLocation(mobMove.GetXGoal(), mobMove.GetYGoal()) == 0){
 			// obNum = obstruction number
 			int obNum = NoObstruction(mobMove.GetXGoal(), mobMove.GetYGoal());
-			if(obNum == 0){
+			if(obNum == 0 || myJob.JobDetails == "Roof"){
 				Vector3 res = mobItem.GetResources();
 				Vector3 neededRes = NeededResources();
 
@@ -600,6 +600,8 @@ public class MobJobs : MonoBehaviour {
 			return new Vector3(0,0,50);
 		}else if(myJob.JobDetails == "WoodDoor"){
 			return new Vector3(50,0,0);
+		}else if(myJob.JobDetails == "Roof"){
+			return new Vector3(50,0,0);
 		}
 		Debug.LogError("Method NeededResources() didn't find appropriate job detail.");
 		return new Vector3();
@@ -616,6 +618,8 @@ public class MobJobs : MonoBehaviour {
 			return manager.TerrainTypes [(int)GameManager.TerrainIndex.metalWall];
 		}else if(myJob.JobDetails == "WoodDoor"){
 			return manager.TerrainTypes [(int)GameManager.TerrainIndex.woodDoor];
+		}else if(myJob.JobDetails == "Roof"){
+			return manager.TerrainTypes[(int)GameManager.TerrainIndex.roof];
 		}
 		Debug.LogError("Method BuildingType() didn't find appropriate job detail.");
 		return null;

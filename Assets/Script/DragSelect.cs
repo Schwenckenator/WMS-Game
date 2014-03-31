@@ -53,7 +53,7 @@ public class DragSelect : MonoBehaviour {
 				Material selectorColour = selectorMaterials[(int)colour.white];
 				if(selectionType == "Mine" || selectionType == "Chop" || selectionType == "Demolish"){
 					selectorColour = selectorMaterials[(int)colour.blue];
-				}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal" ){
+				}else if(selectionType == "BuildRockWall" || selectionType == "BuildWoodWall" || selectionType == "BuildMetalWall" ){
 					selectorColour = selectorMaterials[(int)colour.red];
 				}else if(selectionType == "Stockpile" || selectionType == "GatheringZone"){
 					selectorColour = selectorMaterials[(int)colour.white];
@@ -104,15 +104,23 @@ public class DragSelect : MonoBehaviour {
 				if(selectorInstance){
 					if(selectionType == "Mine" || selectionType == "Chop" || selectionType == "Demolish"){
 						SelectObjects();
-					}else if(selectionType == "BuildRock" || selectionType == "BuildWood" || selectionType == "BuildMetal"){
+					}else 
+					if(selectionType == "BuildRockWall" || selectionType == "BuildWoodWall" || selectionType == "BuildMetalWall"){
 						PlaceObjects();
-					}else if(selectionType == "Stockpile" || selectionType == "GatheringZone"){
+					}else 
+					if(selectionType == "Stockpile" || selectionType == "GatheringZone"){
 						PlaceZone ();
-					}else if(selectionType == "CancelJob"){
+					}else 					
+					if(selectionType == "CancelJob"){
 						CancelSelectedJobs ();
-					}else if(selectionType == "DeleteZone"){
+					}else 					
+					if(selectionType == "DeleteZone"){
 						DeleteZone();
+					}else 
+					if(selectionType == "BuildRoof"){
+						PlaceRoof();
 					}
+
 					if(!Input.GetKey(KeyCode.LeftShift)){
 						Reset ();
 					}
@@ -244,11 +252,11 @@ public class DragSelect : MonoBehaviour {
 
 								JobClass job = ScriptableObject.CreateInstance<JobClass> ();
 								job.Initialise("Build", pos, true);
-								if(selectionType == "BuildRock"){
+								if(selectionType == "BuildRockWall"){
 									job.JobDetails = "Rock";
-								}else if(selectionType == "BuildWood"){
+								}else if(selectionType == "BuildWoodWall"){
 									job.JobDetails = "Wood";
-								}else if(selectionType == "BuildMetal"){
+								}else if(selectionType == "BuildMetalWall"){
 									job.JobDetails = "Metal";
 								}
 
@@ -261,6 +269,88 @@ public class DragSelect : MonoBehaviour {
 		}
 
 	}
+	void PlaceRoof(){
+		//Find which grid spaces the selector is over
+		//Populate with rocks
+		
+		//Find grid space one corner is in
+		//Find grid space opposite corner is in
+		// Every space between those two points is covered
+		// Loop through each axis, place rock there
+		Vector2 temp = selectorInstance.transform.localScale;
+		temp.y *= -1;
+		Vector2 dir = temp;
+		//Undo selector movement
+		
+		
+		Vector2 point = corner + temp;
+		
+		if(dir.x < 0){
+			point.x += 0.25f;
+			corner.x += 0.25f;
+		}
+		if(dir.y < 0){
+			point.y += 0.25f;
+			corner.y += 0.25f;
+		}
+		
+		int xGridCorner, yGridCorner;
+		int xGridPoint, yGridPoint;
+		
+		// Corner to grid space
+		xGridCorner = GameManager.WorldToGrid(corner.x);
+		yGridCorner = GameManager.WorldToGrid(corner.y);
+		// Point to grid spcae
+		xGridPoint = GameManager.WorldToGrid(point.x);
+		yGridPoint = GameManager.WorldToGrid(point.y);
+		
+		//Need to make it loop from lowest value to highest value,
+		// time for tricky variable fun
+		
+		int xLow = Mathf.Min(xGridCorner, xGridPoint);
+		int xHigh = Mathf.Max(xGridCorner, xGridPoint);
+		
+		int yLow = Mathf.Min(yGridCorner, yGridPoint);
+		int yHigh = Mathf.Max(yGridCorner, yGridPoint);
+
+		// If it's a corner, you need a support // If on a corner but there is support
+		//Check for corner support first.
+		//If absent, abandon
+		Debug.Log ("Terrain At "+ xLow.ToString()+", "+yLow.ToString()+" : "+manager.TerrainAtLocation(xLow, yLow));
+		Debug.Log ("Terrain At "+ xLow.ToString()+", "+ (yHigh-1).ToString()+" : "+manager.TerrainAtLocation(xLow, yHigh-1));
+		Debug.Log ("Terrain At "+ (yHigh-1).ToString()+", "+ yLow.ToString()+" : "+manager.TerrainAtLocation(xHigh-1, yLow));
+		Debug.Log ("Terrain At "+ (xHigh-1).ToString()+", "+ (yHigh-1).ToString()+" : "+manager.TerrainAtLocation(xHigh-1, yHigh-1));
+
+
+		if(manager.TerrainAtLocation(xLow, yLow) == -1 || 
+		   manager.TerrainAtLocation(xLow, yHigh-1) == -1 ||
+		   manager.TerrainAtLocation(xHigh-1, yLow) == -1 || 
+		   manager.TerrainAtLocation(xHigh-1, yHigh-1) == -1)
+		{
+			for(int i = xLow; i< xHigh; i++){ 
+				// Is the x point on the grid?
+				if(i < GameManager.MaxGrid() && i >= 0){
+					for(int j = yLow; j< yHigh; j++){
+						// Is the y point on the grid?
+						if(j < GameManager.MaxGrid() && j >= 0){
+
+							// Convert Grid space back into world space
+							Vector3 pos = new Vector3(GameManager.GridToWorld(i),GameManager.GridToWorld(j), 0);
+							
+							JobClass job = ScriptableObject.CreateInstance<JobClass> ();
+							job.Initialise("Build", pos, true);
+							job.JobDetails = "Roof";
+							
+							manager.AddJob(job);
+						}
+					}
+				}
+			}
+		}
+
+
+	}
+
 	void PlaceZone(){
 		//Get scale
 		//Check for min size, 3x3

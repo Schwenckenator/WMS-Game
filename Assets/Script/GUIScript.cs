@@ -122,6 +122,9 @@ public class GUIScript : MonoBehaviour {
 		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Door")){
 			selectedWindow = BUILD_DOOR;
 		}
+		if(GUI.Button ( new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Build Roof")){
+			dragSelect.SetSelectionType("BuildRoof");
+		}
 
 
 		if(GUI.Button (new Rect(20, buttonYpos+diffY*buttonNum++, 160, 20), "Cancel Job")){
